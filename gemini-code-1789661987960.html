@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Informasi Kelas G (Gratia) - S1 Ilmu Hukum</title>
+    <!-- FontAwesome & Google Fonts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --accent: #d97706;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header & Nav */
+        header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: white;
+            padding: 3rem 1rem 4rem;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: white;
+            text-decoration: none;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1100px;
+            margin: -2rem auto 3rem;
+            padding: 0 1rem;
+        }
+
+        /* Card Component */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--bg-light);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Pengurus Kelas Grid */
+        .pengurus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .pengurus-card {
+            background: #f1f5f9;
+            padding: 1.25rem;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid var(--primary-light);
+        }
+
+        .pengurus-card.keting { border-left-color: #2563eb; }
+        .pengurus-card.sekretaris { border-left-color: #059669; }
+        .pengurus-card.bendahara { border-left-color: #d97706; }
+
+        .pengurus-role {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .pengurus-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0.3rem 0;
+        }
+
+        /* Jadwal Section */
+        .day-filter {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .day-btn {
+            background: #f1f5f9;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .day-btn.active, .day-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .jadwal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .jadwal-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .jadwal-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .jadwal-day-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #e0f2fe;
+            color: #0369a1;
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .jadwal-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .jadwal-detail {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        /* Table Anggota */
+        .search-box {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .badge-jabatan {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .bg-keting { background: #dbeafe; color: #1e40af; }
+        .bg-sekretaris { background: #d1fae5; color: #065f46; }
+        .bg-bendahara { background: #fef3c7; color: #92400e; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Kelas G (Gratia)</h1>
+        <p>Program Studi S1 Ilmu Hukum</p>
+        <a href="https://instagram.com/gratia.25" target="_blank" class="social-link">
+            <i class="fab fa-instagram"></i> @gratia.25
+        </a>
+    </header>
+
+    <div class="container">
+        
+        <!-- Pengurus Kelas Section -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-users-cog"></i> Pengurus Kelas
+            </div>
+            <div class="pengurus-grid">
+                <div class="pengurus-card keting">
+                    <div class="pengurus-role">Ketua Tingkat (Keting)</div>
+                    <div class="pengurus-name">Verensyia Sofyan Adam Duda</div>
+                    <small>NIM: 10101425159</small>
+                </div>
+                <div class="pengurus-card sekretaris">
+                    <div class="pengurus-role">Sekretaris</div>
+                    <div class="pengurus-name">Amelia Dolongseda</div>
+                    <small>NIM: 10101425171</small>
+                </div>
+                <div class="pengurus-card bendahara">
+                    <div class="pengurus-role">Bendahara</div>
+                    <div class="pengurus-name">Azizah Maharani Mohama</div>
+                    <small>NIM: 10101425101</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Jadwal Kuliah Section -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-calendar-alt"></i> Jadwal Mata Kuliah
+            </div>
+            
+            <div class="day-filter">
+                <button class="day-btn active" onclick="filterJadwal('semua')">Semua Hari</button>
+                <button class="day-btn" onclick="filterJadwal('Senin')">Senin</button>
+                <button class="day-btn" onclick="filterJadwal('Selasa')">Selasa</button>
+                <button class="day-btn" onclick="filterJadwal('Rabu')">Rabu</button>
+                <button class="day-btn" onclick="filterJadwal('Kamis')">Kamis</button>
+                <button class="day-btn" onclick="filterJadwal('Jumat')">Jumat</button>
+            </div>
+
+            <div class="jadwal-grid" id="jadwal-container">
+                <!-- Data jadwal diisi oleh Javascript -->
+            </div>
+        </div>
+
+        <!-- Anggota Kelas Section -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-address-book"></i> Daftar Mahasiswa
+            </div>
+            <input type="text" id="searchInput" class="search-box" onkeyup="searchMahasiswa()" placeholder="Cari nama atau NIM mahasiswa...">
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>NIM</th>
+                            <th>Nama Mahasiswa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mahasiswa-container">
+                        <!-- Data mahasiswa diisi oleh Javascript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Portal Resmi Kelas G (Gratia) - S1 Ilmu Hukum. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Script Data & Logic -->
+    <script>
+        // Data Mahasiswa
+        const dataMahasiswa = [
+            { no: 1, nim: "10101425006", nama: "SULISTRI M.NUR" },
+            { no: 2, nim: "10101425007", nama: "AL FAJAR" },
+            { no: 3, nim: "10101425011", nama: "SITI RAMADANI ABDUL" },
+            { no: 4, nim: "10101425072", nama: "NAZWA A. BIN ADHAM" },
+            { no: 5, nim: "10101425074", nama: "NAJWA SYIFA ALHASNI" },
+            { no: 6, nim: "10101425101", nama: "AZIZAH MAHARANI MOHAMA", jabatan: "Bendahara", bgClass: "bg-bendahara" },
+            { no: 7, nim: "10101425132", nama: "SITY FAUZIAH MOKOAGOW" },
+            { no: 8, nim: "10101425151", nama: "KHAIRUNNISA PRATIWI RAHMAN" },
+            { no: 9, nim: "10101425154", nama: "WILANDA ADELA G. LAMPENG" },
+            { no: 10, nim: "10101425155", nama: "REVAN RAMDAN HANTULU" },
+            { no: 11, nim: "10101425156", nama: "MOHAMAD ALKINDI HERNANDYA ADIPU" },
+            { no: 12, nim: "10101425157", nama: "HANIFA RAMADHANI BILUDI" },
+            { no: 13, nim: "10101425159", nama: "VERENSYIA SOFYAN ADAM DUDA", jabatan: "Keting", bgClass: "bg-keting" },
+            { no: 14, nim: "10101425160", nama: "ARIEL A SANA'U" },
+            { no: 15, nim: "10101425161", nama: "AMELIA CAHYANI PUTRI PAPUTUNGAN" },
+            { no: 16, nim: "10101425162", nama: "NATHANAEL CHRISTIAN SAERANG" },
+            { no: 17, nim: "10101425163", nama: "ALWI HASNI" },
+            { no: 18, nim: "10101425164", nama: "BRIGITA KAELA" },
+            { no: 19, nim: "10101425165", nama: "KIKIN KINANTI GINOGA" },
+            { no: 20, nim: "10101425166", nama: "MUH. RIZKI FAUZAN HUSIN" },
+            { no: 21, nim: "10101425167", nama: "RASYA ABDILLAH TAHA" },
+            { no: 22, nim: "10101425168", nama: "ADLY FAIRUS MONTU" },
+            { no: 23, nim: "10101425169", nama: "ABDI PRAJA SAHRAIN" },
+            { no: 24, nim: "10101425171", nama: "AMELIA DOLONGSEDA", jabatan: "Sekretaris", bgClass: "bg-sekretaris" },
+            { no: 25, nim: "10101425247", nama: "ALFI SYAHRIL RAMADHAN MACHMUD" },
+            { no: 26, nim: "10101425306", nama: "SUCI RAHMIYATI TUARU" }
+        ];
+
+        // Data Jadwal Matkul
+        const dataJadwal = [
+            { hari: "Senin", matkul: "HUKUM ADAT", sks: "3 SKS", jam: "07.30 - 10.00", ruang: "Pancasila A.2.1", dosen: "Ibu Sri Nanang Meiske Kamba S.H.,M.H" },
+            { hari: "Senin", matkul: "HUKUM PERJANJIAN INTERNASIONAL", sks: "3 SKS", jam: "13.00 - 15.00", ruang: "Yustisia C.2.1", dosen: "Ibu Waode Mustika S.H.,M.H" },
+            { hari: "Selasa", matkul: "HUKUM AGRARIA", sks: "3 SKS", jam: "13.00 - 15.30", ruang: "Konstitusi B.2.3", dosen: "Ibu Sri Nanang Meiske Kamba S.H.,M.H" },
+            { hari: "Selasa", matkul: "DELIK DELIK DALAM KUHP", sks: "2 SKS", jam: "15.30 - 17.10", ruang: "Pancasila A.2.5", dosen: "Ibu Karlin Z. Mamu S.H.,M.H" },
+            { hari: "Rabu", matkul: "TECHNOPRENEURSHIP", sks: "2 SKS", jam: "07.30 - 09.10", ruang: "Pancasila A.2.8", dosen: "Ibu Nur Insani Aulia, S.H., M.Kn" },
+            { hari: "Kamis", matkul: "HUKUM LINGKUNGAN", sks: "3 SKS", jam: "09.10 - 11.40", ruang: "Konstitusi Aula Usman", dosen: "Pak Kurniawan Kadir, S.H.,M.H" },
+            { hari: "Kamis", matkul: "ILMU PERUNDANG-UNDANGAN", sks: "3 SKS", jam: "13.00 - 15.30", ruang: "Pancasila A.2.7", dosen: "Pak Muhamad Khairun Kurniawan Kadir, S.H.,M.H" },
+            { hari: "Jumat", matkul: "LITERASI DIGITAL", sks: "2 SKS", jam: "09.10 - 10.40", ruang: "Konstitusi B.2.2", dosen: "Pak Nurul Fazri Elfikri S.H.,M.H" },
+            { hari: "Jumat", matkul: "HUKUM PERIKATAN", sks: "3 SKS", jam: "14.00 - 17.00", ruang: "Konstitusi B.1.4", dosen: "Pak Dr. Dindin Syarief Nurwahyudin, S.T., S.H., M.En., M.Kn." }
+        ];
+
+        // Render Mahasiswa
+        function renderMahasiswa(data) {
+            const container = document.getElementById("mahasiswa-container");
+            container.innerHTML = "";
+            data.forEach(mhs => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${mhs.no}</td>
+                    <td><code>${mhs.nim}</code></td>
+                    <td>
+                        <strong>${mhs.nama}</strong>
+                        ${mhs.jabatan ? `<span class="badge-jabatan ${mhs.bgClass}">${mhs.jabatan}</span>` : ''}
+                    </td>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // Render Jadwal
+        function renderJadwal(data) {
+            const container = document.getElementById("jadwal-container");
+            container.innerHTML = "";
+            data.forEach(j => {
+                const card = document.createElement("div");
+                card.className = "jadwal-card";
+                card.innerHTML = `
+                    <span class="jadwal-day-badge">${j.hari.toUpperCase()}</span>
+                    <div class="jadwal-title">${j.matkul}</div>
+                    <div class="jadwal-detail"><i class="far fa-clock"></i> ${j.jam} (${j.sks})</div>
+                    <div class="jadwal-detail"><i class="fas fa-building"></i> ${j.ruang}</div>
+                    <div class="jadwal-detail"><i class="fas fa-user-tie"></i> ${j.dosen}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Filter Jadwal berdasarkan Hari
+        function filterJadwal(hari) {
+            // Update active button
+            const buttons = document.querySelectorAll('.day-btn');
+            buttons.forEach(btn => {
+                if(btn.innerText.toLowerCase() === hari.toLowerCase() || (hari === 'semua' && btn.innerText === 'Semua Hari')) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            if(hari === 'semua') {
+                renderJadwal(dataJadwal);
+            } else {
+                const filtered = dataJadwal.filter(j => j.hari.toLowerCase() === hari.toLowerCase());
+                renderJadwal(filtered);
+            }
+        }
+
+        // Fitur Pencarian Mahasiswa
+        function searchMahasiswa() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = dataMahasiswa.filter(mhs => 
+                mhs.nama.toLowerCase().includes(query) || 
+                mhs.nim.includes(query)
+            );
+            renderMahasiswa(filtered);
+        }
+
+        // Inisialisasi awal saat halaman dibuka
+        window.onload = function() {
+            renderMahasiswa(dataMahasiswa);
+            renderJadwal(dataJadwal);
+        };
+    </script>
+</body>
+</html>
